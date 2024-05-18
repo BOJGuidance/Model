@@ -22,7 +22,7 @@ import matplotlib.font_manager as fm
 from matplotlib.font_manager import FontProperties
 
 
-def base64image(filename): # filename = analysismodel()의 리턴값.
+def base64image(filename):
     image_path = filename
 
     with open(image_path, "rb") as image_file:
@@ -30,8 +30,6 @@ def base64image(filename): # filename = analysismodel()의 리턴값.
 
     return JsonResponse({'image': encoded_image})
 
-# model.py 결과물이 base64image()에 인자로 들어가서 동작해야한다.
-# analysismodel(username)의 리턴값은 data 폴더에 들어가도록 해야한다.
 
 def analysismodel(username):
     User_Page_Link = 'https://www.acmicpc.net/user/'
@@ -100,10 +98,7 @@ def analysismodel(username):
 
     plt.savefig('bar_chart.png', dpi=300, bbox_inches='tight')
 
-    return 'bar_chart.png'
-
-
-        
+    return 'bar_chart.png'   
 
     
         
