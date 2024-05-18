@@ -8,11 +8,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+from django.http import JsonResponse
 
 import re
 import csv
 import requests
 import pandas as pd
+import base64
 
 from collections import Counter
 import matplotlib.pyplot as plt
@@ -20,39 +22,46 @@ import matplotlib.font_manager as fm
 from matplotlib.font_manager import FontProperties
 
 
-def base64image():
-    image_path = "/Users/hyun/Desktop/test.png"
+def base64image(filename): # filename = analysismodel()의 리턴값.
+    image_path = filename
 
     with open(image_path, "rb") as image_file:
         encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
 
     return JsonResponse({'image': encoded_image})
 
+# model.py 결과물이 base64image()에 인자로 들어가서 동작해야한다.
+# analysismodel(username)의 리턴값은 data 폴더에 들어가도록 해야한다.
 
-def solvedProblemsList(userName):
-    # Load the user dataset
-    user_df = pd.read_csv('User_Dataset.csv')
+def analysismodel(username):
+    User_Page_Link = 'https://www.acmicpc.net/user/'
+    User_name = username 
+    User_Solved_Problem = []
 
-    # Find the row with the specified userName and extract their solved problems
-    # Ensure the 'User_name' and 'Solved_Problems' column names match those in your CSV
-    try:
-        solved_problems_str = user_df[user_df['User_name'] == userName]['Solved_Problem'].iloc[0]
-        # Use regular expression to find all numbers and remove any unwanted characters
-        solved_problems_list = re.findall(r'\d+', solved_problems_str)
-        # Convert list elements from strings to integers
-        solved_problems_list = [int(problem) for problem in solved_problems_list]
-    except IndexError:
-        solved_problems_list = []  # In case no entry is found for the user
-        print(f"No entry found for user {userName}")
-    return solved_problems_list
+    options = webdriver.ChromeOptions()
+    options.add_argument("headless")
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=webdriver.ChromeOptions())
+
+    driver.get(User_Page_Link + User_name)
+    for i in range(1, 30000):
+        try:
+            User_Solved_Problem.append(driver.find_element(By.XPATH,
+                                                        '/html/body/div[2]/div[2]/div[3]/div[2]/div/div[2]/div[2]/div[2]/div/a[' + str(
+                                                            i) + ']').text)
+        except NoSuchElementException:
+            break
 
 
-def categoryCounts():
     # Load the algorithm dataset
-    algorithm_df = pd.read_csv('algorithm.csv')
+    algorithm_df = pd.read_csv('data/algorithm.csv')
+
+    # Ensure problem IDs are strings to match with scraped data
+    algorithm_df['problem_id'] = algorithm_df['problem_id'].astype(str)
 
     # Filter the dataframe to get only the rows corresponding to the solved problems
-    solved_df = algorithm_df[algorithm_df['problem_id'].isin(solvedProblemsList(userName))]
+    solved_df = algorithm_df[algorithm_df['problem_id'].isin(User_Solved_Problem)]
+
 
     # Initialize a Counter to keep track of category frequencies
     category_counts = Counter()
@@ -63,24 +72,38 @@ def categoryCounts():
         categories_list = categories.split(',')
         # Remove any leading/trailing whitespace and count each category
         category_counts.update([category.strip() for category in categories_list])
-    return category_counts
+
+    # Display the frequency of each category
+
+    # Set the font properties for Korean support
+    font_path = r'data/NanumBarunGothic.ttf'  # Adjust the path to your Korean font
+    korean_font = FontProperties(fname=font_path, size=8)
+
+    # Create labels and values
+    labels = list(category_counts.keys())
+    values = list(category_counts.values())
+
+    # Create the bar chart
+    plt.figure(figsize=(14, 8))  # Increase figure size for better visibility
+    plt.bar(labels, values, color='royalblue')
+
+    # Add title and labels with Korean font properties
+    plt.title('유형별 풀이수', fontproperties=korean_font, size=16)
+    plt.xlabel('유형명', fontproperties=korean_font, size=14)
+    plt.ylabel('풀이 횟수', fontproperties=korean_font, size=14)
+
+    # Rotate x-labels for better visibility
+    plt.xticks(rotation=90, fontproperties=korean_font)
+
+    # Show the plot
+    plt.tight_layout()  # Adjust layout to fit labels
+
+    plt.savefig('bar_chart.png', dpi=300, bbox_inches='tight')
+
+    return 'bar_chart.png'
 
 
-def tagCounting():
-    file_path = 'Problem_Dataset.csv'
+        
 
-    # Read the CSV file
-    df = pd.read_csv(file_path)
-
-    # Print column names to verify
-    print("Column names:", df.columns)
-
-    # Extract the column values into a list (replace 'Problem_number' with the correct column name)
-    correct_column_name = 'Problem_Number'  # Replace this with the verified column name from the print output
-    problem_numbers = df[correct_column_name].tolist()
-
-    return problem_numbers
-
-
-def imageGeneration(userName):
-
+    
+        

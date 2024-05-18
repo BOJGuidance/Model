@@ -20,6 +20,6 @@ from django.urls import path
 from analysis.view import Analysis
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    #path('admin/', admin.site.urls),
     path('analysis/image/<path:handle>', Analysis.as_view()),
 ]

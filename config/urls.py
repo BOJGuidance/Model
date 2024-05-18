@@ -22,5 +22,5 @@ import analysis
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('analysis.urls')),
-    path('', include('recommendation.urls')),
+    #path('', include('recommendation.urls')),
 ]

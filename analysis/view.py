@@ -10,6 +10,7 @@ class Analysis(View):
     def get(self, request, handle):
         print("Handle: ", handle)
 
-        responseData = models.base64image()
+        filename = models.analysismodel(handle)
+        responseData = models.base64image(filename)
 
         return HttpResponse(responseData, content_type='application/json')
