@@ -18,12 +18,13 @@ RUN pip install --upgrade pip && \
 # Chrome 드라이버 다운로드 및 설치
 RUN apt-get update && apt-get install -y wget unzip && \
     wget -q https://chromedriver.storage.googleapis.com/LATEST_RELEASE -O /tmp/chrome_version && \
+    wget -q https://storage.googleapis.com/chrome-for-testing-public/114.0.5735.90/linux64/chrome-linux64.zip -O /tmp/chrome.zip && \
+    unzip /tmp/chrome.zip -d /usr/local/bin/ && \
+    rm /tmp/chrome_version /tmp/chrome.zip && \
     wget -q https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip -O /tmp/chromedriver.zip && \
     unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
     rm /tmp/chrome_version /tmp/chromedriver.zip && \
     chmod +x /usr/local/bin/chromedriver
-
-RUN chmod +x /usr/local/bin/chromedriver
 
 # 소스 코드 복사
 COPY . /app
