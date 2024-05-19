@@ -22,8 +22,8 @@ import matplotlib.font_manager as fm
 from matplotlib.font_manager import FontProperties
 
 
-def base64image(filename):
-    image_path = filename
+def base64image(path):
+    image_path = path
 
     with open(image_path, "rb") as image_file:
         encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
@@ -31,9 +31,11 @@ def base64image(filename):
     return JsonResponse({'image': encoded_image})
 
 
-def analysismodel(username):
+def analysisModel(handle):
+    imageSave = 'data/images/'+handle+'.png'
+
     User_Page_Link = 'https://www.acmicpc.net/user/'
-    User_name = username 
+    User_name = handle
     User_Solved_Problem = []
 
     options = webdriver.ChromeOptions()
@@ -96,9 +98,9 @@ def analysismodel(username):
     # Show the plot
     plt.tight_layout()  # Adjust layout to fit labels
 
-    plt.savefig('bar_chart.png', dpi=300, bbox_inches='tight')
+    plt.savefig(imageSave, dpi=300, bbox_inches='tight')
 
-    return 'bar_chart.png'   
+    return base64image(imageSave)
 
     
         

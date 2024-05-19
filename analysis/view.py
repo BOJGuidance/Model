@@ -8,9 +8,5 @@ from analysis import models
 @method_decorator(csrf_exempt, name='dispatch')
 class Analysis(View):
     def get(self, request, handle):
-        print("Handle: ", handle)
-
-        filename = models.analysismodel(handle)
-        responseData = models.base64image(filename)
-
+        responseData = models.analysisModel(handle)
         return HttpResponse(responseData, content_type='application/json')
