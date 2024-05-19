@@ -41,7 +41,11 @@ def analysisModel(handle):
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=webdriver.ChromeOptions())
+    service = Service(executable_path='/usr/local/bin/chromedriver')
+    options = webdriver.ChromeOptions()
+    options.add_argument('--no-sandbox')
+    driver = webdriver.Chrome(service=service, options=options)
+    # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=webdriver.ChromeOptions())
 
     driver.get(User_Page_Link + User_name)
     for i in range(1, 30000):
