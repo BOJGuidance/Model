@@ -83,7 +83,7 @@ def analysisModel(handle):
     # Display the frequency of each category
 
     # Set the font properties for Korean support
-    font_path = r'data/NanumBarunGothic.ttf'  # Adjust the path to your Korean font
+    font_path = r'data/NANUMBARUNGOTHIC.TTF'  # Adjust the path to your Korean font
     korean_font = FontProperties(fname=font_path, size=8)
 
     # Create labels and values
