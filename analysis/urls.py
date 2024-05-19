@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from analysis.view import Analysis
+from analysis.views import Analysis
 
 urlpatterns = [
     path('analysis/image/<path:handle>', Analysis.as_view()),
