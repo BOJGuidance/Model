@@ -15,22 +15,16 @@ COPY ./requirements.txt /app/requirements.txt
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-# 필요한 라이브러리 설치
-RUN apt-get update && apt-get install -y \
-    wget \
-    unzip \
-    libglib2.0-0=2.50.3-2 \
-    libnss3=2:3.26.2-1.1+deb9u1 \
-    libgconf-2-4=3.2.6-4+b1 \
-    libfontconfig1=2.11.0-6.7+b1 && \
-    rm -rf /var/lib/apt/lists/*
-
 # Chrome 드라이버 다운로드 및 설치
-RUN wget -q https://chromedriver.storage.googleapis.com/LATEST_RELEASE -O /tmp/chrome_version && \
+RUN apt-get update && apt-get install -y wget unzip && \
+    wget -q https://chromedriver.storage.googleapis.com/LATEST_RELEASE -O /tmp/chrome_version && \
     wget -q https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip -O /tmp/chromedriver.zip && \
     unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
     rm /tmp/chrome_version /tmp/chromedriver.zip && \
-    chmod +x /usr/local/bin/chromedriver
+    chmod 777 /usr/local/bin/chromedriver
+
+# libnss2 설치
+RUN apt-get install -y libnss2
 
 # Chrome 다운로드 및 설치
 RUN wget -q https://storage.googleapis.com/chrome-for-testing-public/114.0.5735.90/linux64/chrome-linux64.zip -O /tmp/chrome-linux64.zip \
