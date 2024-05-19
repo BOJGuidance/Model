@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y wget unzip && \
     chmod 777 /usr/local/bin/chromedriver
 
 # libnss2 설치
+USER root
 RUN apt-get install -y libnss2
 
 # Chrome 다운로드 및 설치
