@@ -25,7 +25,20 @@ RUN apt-get update && apt-get install -y wget unzip && \
 
 # libnss2 설치
 USER root
-RUN apt-get install -y libnss3
+RUN apt-get install -y \
+    libnss3 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libasound2
+
 
 # Chrome 다운로드 및 설치
 RUN wget -q https://storage.googleapis.com/chrome-for-testing-public/114.0.5735.90/linux64/chrome-linux64.zip -O /tmp/chrome-linux64.zip \
