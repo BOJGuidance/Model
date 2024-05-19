@@ -21,7 +21,9 @@ RUN apt-get update && apt-get install -y wget unzip && \
     wget -q https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip -O /tmp/chromedriver.zip && \
     unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
     rm /tmp/chrome_version /tmp/chromedriver.zip && \
-    chmod +x /usr/local/bin/chromedriver
+    chmod +x /usr/local/bin/chromedriver \
+
+RUN apt-get install -y chromium
 
 # Chrome 다운로드 및 설치
 RUN wget -q https://storage.googleapis.com/chrome-for-testing-public/114.0.5735.90/linux64/chrome-linux64.zip -O /tmp/chrome-linux64.zip \
