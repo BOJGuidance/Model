@@ -24,11 +24,10 @@ RUN apt-get update && apt-get install -y wget unzip && \
     chmod +x /usr/local/bin/chromedriver
 
 # Chrome 다운로드 및 설치
-RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O /tmp/google-chrome-stable.deb \
-    && dpkg -i /tmp/google-chrome-stable.deb \
-    && apt-get install -f \
-    && rm /tmp/google-chrome-stable.deb
-
+RUN wget -q https://storage.googleapis.com/chrome-for-testing-public/114.0.5735.90/linux64/chrome-linux64.zip -O /tmp/chrome-linux64.zip \
+    && unzip /tmp/chrome-linux64.zip -d /opt/google \
+    && rm /tmp/chrome-linux64.zip \
+    && ln -s /opt/google/chrome-linux64/chrome /usr/local/bin/chrome
 
 # 소스 코드 복사
 COPY . /app
