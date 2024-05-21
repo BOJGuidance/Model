@@ -38,14 +38,11 @@ def analysisModel(handle):
     User_name = handle
     User_Solved_Problem = []
 
+    CHROMEDRIVER_PATH = '/home/ec2-user/chromedriver-linux64/chromedriver'
+    service = Service(CHROMEDRIVER_PATH)
     options = webdriver.ChromeOptions()
-    options.add_argument("headless")
-
-    service = Service(executable_path='/usr/local/bin/chromedriver')
-    options = webdriver.ChromeOptions()
-    options.add_argument('--no-sandbox')
     options.add_argument('--headless')
-    options.add_argument("--single-process")
+    options.add_argument('--no-sandbox')
     options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(service=service, options=options)
     # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=webdriver.ChromeOptions())
@@ -77,6 +74,8 @@ def analysisModel(handle):
         categories_list = categories.split(',')
         # Remove any leading/trailing whitespace and count each category
         category_counts.update([category.strip() for category in categories_list])
+
+        print([category.strip() for category in categories_list])
 
     # Display the frequency of each category
 
