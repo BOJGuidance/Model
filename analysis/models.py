@@ -32,7 +32,7 @@ def base64image(path):
 
 
 def analysisModel(handle):
-    imageSave = 'data/images/'+handle+'.png'
+    imageSave = 'data/images/' + handle + '.png'
 
     User_Page_Link = 'https://www.acmicpc.net/user/'
     User_name = handle
@@ -54,11 +54,10 @@ def analysisModel(handle):
     for i in range(1, 30000):
         try:
             User_Solved_Problem.append(driver.find_element(By.XPATH,
-                                                        '/html/body/div[2]/div[2]/div[3]/div[2]/div/div[2]/div[2]/div[2]/div/a[' + str(
-                                                            i) + ']').text)
+                                                           '/html/body/div[2]/div[2]/div[3]/div[2]/div/div[2]/div[2]/div[2]/div/a[' + str(
+                                                               i) + ']').text)
         except NoSuchElementException:
             break
-
 
     # Load the algorithm dataset
     algorithm_df = pd.read_csv('data/algorithm.csv')
@@ -68,7 +67,6 @@ def analysisModel(handle):
 
     # Filter the dataframe to get only the rows corresponding to the solved problems
     solved_df = algorithm_df[algorithm_df['problem_id'].isin(User_Solved_Problem)]
-
 
     # Initialize a Counter to keep track of category frequencies
     category_counts = Counter()
@@ -85,6 +83,7 @@ def analysisModel(handle):
     # Set the font properties for Korean support
     font_path = r'data/NANUMBARUNGOTHIC.TTF'  # Adjust the path to your Korean font
     korean_font = FontProperties(fname=font_path, size=8)
+    plt.rcParams['axes.unicode_minus'] = False
 
     # Create labels and values
     labels = list(category_counts.keys())
@@ -109,5 +108,4 @@ def analysisModel(handle):
 
     return base64image(imageSave)
 
-    
-        
+
